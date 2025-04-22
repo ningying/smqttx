@@ -8,6 +8,8 @@ import com.hivemq.client.mqtt.mqtt3.message.connect.connack.Mqtt3ConnAck;
 import io.github.quickmsg.common.rule.source.Source;
 import io.github.quickmsg.common.rule.source.SourceBean;
 import io.netty.util.internal.StringUtil;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.StandardCharsets;
@@ -23,6 +25,8 @@ import java.util.concurrent.CompletableFuture;
  * @author zhaopeng
  */
 @Slf4j
+@NoArgsConstructor
+@AllArgsConstructor
 public class MqttSourceBean implements SourceBean {
 
     private Mqtt3AsyncClient client;
@@ -118,5 +122,10 @@ public class MqttSourceBean implements SourceBean {
         if (client != null) {
             client.disconnect();
         }
+    }
+
+    @Override
+    public SourceBean copy() {
+        return new MqttSourceBean(client);
     }
 }

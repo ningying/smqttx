@@ -40,6 +40,8 @@ public class PublishMessage implements Message {
 
     private String clientId;
 
+    private String address;
+
     @JsonIgnore
     private MqttChannel mqttChannel;
 
@@ -68,6 +70,7 @@ public class PublishMessage implements Message {
         this.time = DateUtil.format(new Date(), DatePattern.NORM_DATETIME_FORMAT);
         this.clientId = Optional.ofNullable(mqttChannel)
                     .map(MqttChannel::getClientId).orElse(null);
+        this.address = Optional.ofNullable(mqttChannel).map(MqttChannel::getAddress).orElse(null);
     }
 
 }

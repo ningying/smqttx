@@ -3,6 +3,8 @@ package io.github.quickmsg.source.rocketmq;
 import io.github.quickmsg.common.rule.source.Source;
 import io.github.quickmsg.common.rule.source.SourceBean;
 import io.github.quickmsg.common.utils.JacksonUtil;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.rocketmq.client.producer.DefaultMQProducer;
 import org.apache.rocketmq.client.producer.SendResult;
@@ -17,6 +19,8 @@ import java.util.Optional;
  * @author zhaopeng
  */
 @Slf4j
+@NoArgsConstructor
+@AllArgsConstructor
 public class RocketmqSourceBean implements SourceBean {
 
     /**
@@ -84,6 +88,11 @@ public class RocketmqSourceBean implements SourceBean {
         if (producer != null) {
             producer.shutdown();
         }
+    }
+
+    @Override
+    public SourceBean copy() {
+        return new RocketmqSourceBean(producer, topic, tags);
     }
 
 }

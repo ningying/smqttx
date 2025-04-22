@@ -3,6 +3,7 @@ package io.github.quickmsg.source.db;
 import io.github.quickmsg.common.rule.source.Source;
 import io.github.quickmsg.common.rule.source.SourceBean;
 import io.github.quickmsg.source.db.config.HikariCPConnectionProvider;
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.jooq.DSLContext;
 import org.jooq.impl.DSL;
@@ -18,6 +19,7 @@ import java.util.Properties;
  * @author zhaopeng
  */
 @Slf4j
+@AllArgsConstructor
 public class DbSourceBean implements SourceBean {
 
 
@@ -70,6 +72,11 @@ public class DbSourceBean implements SourceBean {
     @Override
     public void close() {
         HikariCPConnectionProvider.singleTon().shutdown();
+    }
+
+    @Override
+    public SourceBean copy() {
+        return new DbSourceBean();
     }
 
 }

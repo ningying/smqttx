@@ -5,6 +5,8 @@ import io.github.quickmsg.common.rule.source.SourceBean;
 import io.github.quickmsg.common.utils.JacksonUtil;
 import io.netty.buffer.PooledByteBufAllocator;
 import io.netty.handler.codec.http.HttpHeaderNames;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import reactor.core.publisher.Mono;
 import reactor.netty.http.client.HttpClient;
@@ -15,6 +17,8 @@ import java.util.Map;
  * @author luxurong
  */
 @Slf4j
+@NoArgsConstructor
+@AllArgsConstructor
 public class HttpSourceBean implements SourceBean {
 
     private HttpParam httpParam;
@@ -56,6 +60,11 @@ public class HttpSourceBean implements SourceBean {
     @Override
     public void close() {
         httpClient.configuration().connectionProvider().dispose();
+    }
+
+    @Override
+    public SourceBean copy() {
+        return new HttpSourceBean(httpParam, httpClient);
     }
 
 

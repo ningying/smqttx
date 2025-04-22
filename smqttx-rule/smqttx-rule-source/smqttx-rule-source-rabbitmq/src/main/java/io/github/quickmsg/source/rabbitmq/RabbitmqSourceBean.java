@@ -6,6 +6,8 @@ import com.rabbitmq.client.ConnectionFactory;
 import io.github.quickmsg.common.rule.source.Source;
 import io.github.quickmsg.common.rule.source.SourceBean;
 import io.github.quickmsg.common.utils.JacksonUtil;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
@@ -17,6 +19,8 @@ import java.util.Map;
  * @author leafseelight
  */
 @Slf4j
+@NoArgsConstructor
+@AllArgsConstructor
 public class RabbitmqSourceBean implements SourceBean {
 
     /**
@@ -115,6 +119,11 @@ public class RabbitmqSourceBean implements SourceBean {
         } catch (Exception e) {
             log.error("#Close.Exception: {}", e.getMessage());
         }
+    }
+
+    @Override
+    public SourceBean copy() {
+        return new RabbitmqSourceBean(connection, channelHashMap, queueName);
     }
 
 

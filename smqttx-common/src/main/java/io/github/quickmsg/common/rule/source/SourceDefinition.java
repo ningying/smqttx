@@ -12,6 +12,8 @@ public class SourceDefinition {
 
     private Source source;
 
+    private String sourceId;
+
     private String sourceName;
 
     private String replace;

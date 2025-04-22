@@ -46,4 +46,9 @@ public interface SourceBean {
      */
     void close();
 
+    /**
+     * 复制对象
+     */
+    SourceBean copy();
+
 }

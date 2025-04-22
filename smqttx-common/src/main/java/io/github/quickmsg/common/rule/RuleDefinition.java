@@ -20,5 +20,5 @@ public class RuleDefinition {
 
     private String script;
 
-
+    private String sourceId;
 }

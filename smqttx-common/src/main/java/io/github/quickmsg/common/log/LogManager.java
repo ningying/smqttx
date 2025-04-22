@@ -1,9 +1,17 @@
 package io.github.quickmsg.common.log;
 
 import cn.hutool.core.collection.ConcurrentHashSet;
+import cn.hutool.core.util.StrUtil;
+import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.JSONObject;
+import com.alibaba.fastjson.serializer.JSONSerializer;
+import com.alibaba.fastjson.serializer.ObjectSerializer;
+import com.alibaba.fastjson.serializer.SerializeConfig;
 import io.github.quickmsg.common.channel.MqttChannel;
 import lombok.extern.slf4j.Slf4j;
 
+import java.io.IOException;
+import java.lang.reflect.Type;
 import java.util.Optional;
 
 /**
@@ -40,7 +48,7 @@ public class LogManager {
                     Optional.ofNullable(mqttChannel).map(MqttChannel::getClientId).orElse(null),
                     type.getName(),
                     eventStatus.getName(),
-                    message);
+                    this.toTruncateFieldStr(message));
         }
     }
 
@@ -55,7 +63,7 @@ public class LogManager {
                     Optional.ofNullable(mqttChannel).map(MqttChannel::getClientId).orElse("system"),
                     type.getName(),
                     LogStatus.FAILED.getName(),
-                    message);
+                    this.toTruncateFieldStr(message));
         }
     }
 
@@ -72,7 +80,41 @@ public class LogManager {
                     Optional.ofNullable(mqttChannel).map(MqttChannel::getClientId).orElse(null),
                     type.getName(),
                     logStatus.getName(),
-                    message);
+                    this.toTruncateFieldStr(message));
+        }
+    }
+
+    private String toTruncateFieldStr(String msg) {
+        if(msg == null) return "";
+        JSONObject jsonObject = JSONObject.parseObject(msg);
+        SerializeConfig serializeConfig = new SerializeConfig();
+        FieldTruncatingSerializer fieldTruncatingSerializer = new FieldTruncatingSerializer();
+        serializeConfig.put(String.class, fieldTruncatingSerializer);
+        return JSON.toJSONString(jsonObject, serializeConfig);
+    }
+
+    /**
+     * json序列化截断器
+     */
+    static class FieldTruncatingSerializer implements ObjectSerializer {
+
+        private int maxLength = 1000;
+
+        public FieldTruncatingSerializer() {
+
+        }
+        public FieldTruncatingSerializer(int maxLength) {
+            this.maxLength = maxLength;
+        }
+
+        @Override
+        public void write(JSONSerializer serializer, Object object, Object fieldName, Type fieldType, int features) throws IOException {
+            String value = (String) object;
+            if (value.length() > maxLength) {
+                serializer.write(value.substring(0, maxLength).concat("..."));
+            } else {
+                serializer.write(value);
+            }
         }
     }
 

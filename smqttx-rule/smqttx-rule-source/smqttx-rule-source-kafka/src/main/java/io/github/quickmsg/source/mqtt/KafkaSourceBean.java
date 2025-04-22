@@ -3,6 +3,8 @@ package io.github.quickmsg.source.mqtt;
 import io.github.quickmsg.common.rule.source.Source;
 import io.github.quickmsg.common.rule.source.SourceBean;
 import io.github.quickmsg.common.utils.JacksonUtil;
+import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerRecord;
@@ -17,6 +19,8 @@ import java.util.Properties;
  * @author zhaopeng
  */
 @Slf4j
+@NoArgsConstructor
+@AllArgsConstructor
 public class KafkaSourceBean implements SourceBean {
 
     private KafkaProducer<String, Object> producer;
@@ -72,6 +76,11 @@ public class KafkaSourceBean implements SourceBean {
         if (producer != null) {
             producer.close();
         }
+    }
+
+    @Override
+    public SourceBean copy() {
+        return new KafkaSourceBean(producer, topic);
     }
 
 }

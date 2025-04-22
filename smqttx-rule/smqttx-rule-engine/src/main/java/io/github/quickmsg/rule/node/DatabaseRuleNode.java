@@ -19,8 +19,11 @@ public class DatabaseRuleNode implements RuleNode {
 
     private RuleNode ruleNode;
 
-    public DatabaseRuleNode(String script) {
+    private String sourceId;
+
+    public DatabaseRuleNode(String sourceId, String script) {
         this.script = script;
+        this.sourceId = sourceId;
     }
 
     @Override
@@ -38,7 +41,7 @@ public class DatabaseRuleNode implements RuleNode {
     public void execute(ContextView contextView) {
         Map<String,Object> message = contextView.get(Map.class);
         if (script != null) {
-            Optional.ofNullable(SourceManager.getSourceBean(Source.DATA_BASE))
+            Optional.ofNullable(SourceManager.getSourceBean(sourceId))
                     .ifPresent(sourceBean -> sourceBean.transmit(triggerTemplate(script, context -> message.forEach(context::set))));
         }
         executeNext(contextView);

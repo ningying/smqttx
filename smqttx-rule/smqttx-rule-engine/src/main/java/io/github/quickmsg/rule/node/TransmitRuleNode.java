@@ -15,16 +15,16 @@ import java.util.Map;
  */
 public class TransmitRuleNode implements RuleNode {
 
-    private final Source source;
-
     private final String script;
 
     private RuleNode ruleNode;
 
+    private String sourceId;
 
-    public TransmitRuleNode(Source source, String script) {
-        this.source = source;
+
+    public TransmitRuleNode(String sourceId, String script) {
         this.script = script;
+        this.sourceId = sourceId;
     }
 
     @Override
@@ -39,7 +39,7 @@ public class TransmitRuleNode implements RuleNode {
         } else {
             param = contextView.get(Map.class);
         }
-        SourceManager.getSourceBean(source).transmit(param);
+        SourceManager.getSourceBean(sourceId).transmit(param);
         executeNext(contextView);
     }
 
